@@ -16,15 +16,15 @@ const pool = mysql.createPool({
     database: "SO2"
 })
 
-// pool.getConnection()
-//   .then(connection => {
-//     console.log('Connected to MySQL database with threadId: ' + connection.threadId);
-//     connection.release(); // release connection
-//   })
-//   .catch(err => {
-//     console.error('Database connection failed: ' + err.stack);
-//     process.exit(1); // exit with failure
-//   });
+pool.getConnection()
+  .then(connection => {
+    console.log('Connected to MySQL database with threadId: ' + connection.threadId);
+    connection.release(); // release connection
+  })
+  .catch(err => {
+    console.error('Database connection failed: ' + err.stack);
+    process.exit(1); // exit with failure
+  });
 
 // Routes
 // Create a sala
