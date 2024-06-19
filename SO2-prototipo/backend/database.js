@@ -47,7 +47,7 @@ app.get('/salas', async (req, res) => {
   try {
     const query = 'SELECT * FROM Salas';
     const [rows] = await pool.query(query);
-    res.json(rows);
+    res.send(rows);
   } catch (error) {
     console.error('Error fetching salas: ' + error.message);
     res.status(500).json({ error: 'Error fetching salas' });
