@@ -13,7 +13,7 @@ const pool = mysql.createPool({
     host: "localhost",
     user:"root",
     password:"password",
-    database: "so2"
+    database: "SO2"
 })
 
 pool.getConnection()
