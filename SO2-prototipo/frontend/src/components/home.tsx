@@ -1,8 +1,7 @@
 import MenuSuperior from "./menuSuperior"
-import { Salas } from "../usefulBits/salasInterface"
+import { Salas } from "../interfaces/salasInterface"
 import { useEffect, useState } from "react"
-import dbConnection from "../usefulBits/dbConnection"
-import axios from "axios"
+import dbConnection from "../dbRoutes/dbConnection"
 import separaDataHora from "../usefulBits/separarDataHora"
 
 
@@ -18,18 +17,24 @@ function Home() {
   async function handlePopCombo(){
     const url = `${dbConnection()}/salas`
     try {
-      const response = await axios.get(url);
-      setSalas(response.data)
+      const response = await fetch(url);
+      if(!response.ok){
+        throw new Error(`HTTP error! Status: ${response.status}`)
+      }
+      const data = await response.json()
+      setSalas(data)
     } catch (error) {
       console.error('There was an error!', error);
     }
   }
 
-  const updateHora:any = (e:Date) =>{
+  const updateHora:any = (e:any) =>{
+    if (typeof e ==='string'){
     const formatar = e.toString()
     const jsl = separaDataHora(formatar)
     const retorno = jsl?.[0]
     return retorno
+    }
   }
 
   const search = (): void => {
@@ -53,7 +58,7 @@ function Home() {
 
   const Cards = <>
               {salas.map((sala,index)=>
-                <div key={index} className="p-8 border border-gray-500 flex flex-col">
+                <div key={index} className="p-5 border border-gray-500 flex flex-col w-60">
                   <label>Nome: {sala.salaNome}</label>
                   <label>Local: {sala.salaLocal}</label>
                   <label>Data de uso: {updateHora(sala.salaDataUso)}</label>
@@ -66,7 +71,7 @@ function Home() {
 
   const CardBusca=<>
                 {busca.map((sala,index)=>
-                <div key={index} className="p-8 border border-gray-500 flex flex-col">
+                <div key={index} className="p-8 border border-gray-500">
                   <label>Nome: {sala.salaNome}</label>
                   <label>Local: {sala.salaLocal}</label>
                   <label>Data de uso: {updateHora(sala.salaDataUso)}</label>
@@ -96,7 +101,7 @@ function Home() {
               <input className="pl-1" type="text" placeholder="Nome da Sala" onChange={(e)=>setNomeBusca(e.target.value)}/>
               <button type="button" className="px-1 ml-1 bg-slate-600 text-white rounded-lg" onClick={search}>Buscar</button>
             </div>
-            <div className="flex overflow-y-auto p-1">
+            <div className=" w-fit h-80 flex overflow-x-auto m-3 mt-6 gap-1">
               {busca.length>0 ? CardBusca: Cards}
             </div>
           </div>

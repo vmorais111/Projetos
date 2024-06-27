@@ -1,7 +1,6 @@
 import { useState } from "react"
 import { useNavigate} from "react-router-dom";
-import axios from "axios";
-import dbConnection from "../usefulBits/dbConnection";
+import dbConnection from "../dbRoutes/dbConnection";
 
 function Login() {
 
@@ -13,9 +12,13 @@ function Login() {
         e.preventDefault();
         const url = `${dbConnection()}/login/${email}/${senha}`
         try {
-            const response = await axios.get(url);
-            if (response.data.message === "Login successful"){
-                navigate("/home")
+            const response = await fetch(url);
+            if (!response.ok) {
+              throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            const data = await response.json();
+            if (data.message === "Login successful") {
+              navigate("/home");
             }
         } catch (error) {
             console.error('There was an error!', error);

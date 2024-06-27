@@ -1,5 +1,4 @@
 export interface Salas{
-    salaId: number,
     salaNome: string,
     caminhoImagem: string,
     salaLocal: string,
